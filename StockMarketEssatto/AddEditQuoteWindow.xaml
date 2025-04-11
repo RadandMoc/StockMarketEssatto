@@ -1,0 +1,75 @@
+﻿<Window x:Class="StockMarketEssatto.AddEditQuoteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StockMarketEssatto"
+        xmlns:vm="clr-namespace:StockMarketEssatto.ViewModels"
+        mc:Ignorable="d"
+        Title="Add/Edit Stock Quote"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="ToolWindow"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        d:DataContext="{d:DesignInstance Type=vm:AddEditQuoteViewModel, IsDesignTimeCreatable=True}">
+
+    <Window.Resources>
+        <Style TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                    Path=(Validation.Errors)/ErrorContent}"/>
+                    <Setter Property="BorderBrush" Value="Red"/>
+                    <Setter Property="BorderThickness" Value="1.5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type DatePicker}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                    Path=(Validation.Errors)/ErrorContent}"/>
+                    <Setter Property="BorderBrush" Value="Red"/>
+                    <Setter Property="BorderThickness" Value="1.5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border Padding="15">
+        <StackPanel Width="300">
+            <TextBlock Text="Ticker Symbol:" FontWeight="SemiBold"/>
+            <TextBox Margin="0,2,0,8" Text="{Binding TickerSymbol, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
+
+            <TextBlock Text="Company Name:" FontWeight="SemiBold"/>
+            <TextBox Margin="0,2,0,8" Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
+
+            <TextBlock Text="Price:" FontWeight="SemiBold"/>
+            <TextBox Margin="0,2,0,8" Text="{Binding Price, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, StringFormat=N2}"/>
+            <TextBlock Text="Fetch Date:" FontWeight="SemiBold"/>
+            <DatePicker Margin="0,2,0,8" SelectedDate="{Binding FetchDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"/>
+
+            <CheckBox Margin="0,5,0,15" IsChecked="{Binding IsActiveTrading}" Content=" Is Actively Traded"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Save" IsDefault="True" MinWidth="80" Margin="0,0,10,0" Click="SaveButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsValid}" Value="True">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="Cancel" IsCancel="True" MinWidth="80" Click="CancelButton_Click"/>
+            </StackPanel>
+
+        </StackPanel>
+    </Border>
+</Window>
